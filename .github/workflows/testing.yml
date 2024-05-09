@@ -1,22 +1,24 @@
 name: Unit Test
 
-on: [pull_request]
+on:
+  pull_request:
 
 jobs:
   tests:
-    runs-on: ubunto-latest
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [18.x, 16.x]
+        node-version: [20.x]
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - name: npm install
-        run: npm ci
-      - name: tests
-        run: npm test
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Run tests
+        run: yarn test
